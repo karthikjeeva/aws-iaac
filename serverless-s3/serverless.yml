@@ -1,0 +1,23 @@
+service: serverless-s3
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-south-1
+  stackName: s3Demo
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - s3:
+          bucket: photoskar
+          event: s3:ObjectCreated:*
+      - s3:
+          bucket: photoskar
+          event: s3:ObjectRemoved:*
+
+
+
