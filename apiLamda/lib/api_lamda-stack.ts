@@ -5,6 +5,7 @@ import { join } from 'path';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export class ApiLamdaStack extends cdk.Stack {
   //private api = new RestApi(this, 'HelloApi');
@@ -29,5 +30,9 @@ export class ApiLamdaStack extends cdk.Stack {
       handler: 'tsLamda.handler'
     })
   
+    const s3ListPolicy = new PolicyStatement();
+    s3ListPolicy.addActions('s3:ListAllMyBuckets');
+    s3ListPolicy.addResources('*');
+    helloLamdaWebpack.addToRolePolicy(s3ListPolicy);
   }
 }
