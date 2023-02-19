@@ -9,7 +9,12 @@ import { join } from 'path';
 export class SpaceStack extends Stack {
     private api = new RestApi(this, 'spaceAPI');
 
-    private spacesTable = new GenericTable('SpacesTable', 'spaceId', this);
+    //private spacesTable = new GenericTable('SpacesTable', 'spaceId', this);
+    private spacesTable = new GenericTable(this, {
+        tableName: 'SpacesTable',
+        primaryKey: 'spaceId',
+        createLambdaPath: 'Create'
+    });
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
         const helloLamda = new LamdaFunction(this, 'helloLamda', {
@@ -22,6 +27,11 @@ export class SpaceStack extends Stack {
         const helloLamdaIntegration = new LambdaIntegration(helloLamda);
         const helloLamdaResouce = this.api.root.addResource('hello');
         helloLamdaResouce.addMethod('GET', helloLamdaIntegration);
+
+        //Spaces API integration
+        const spacesResources = this.api.root.addResource('spaces');
+        spacesResources.addMethod('POST', this.spacesTable.createLambdaIntegration);
+
     }
 
     

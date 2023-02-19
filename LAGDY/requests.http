@@ -1,0 +1,11 @@
+@endpoint=xxx
+
+POST {{endpoint}}/spaces
+Content-Type: application/json
+
+{
+    "location": "London",
+    "name": "Best Location"
+}
+
+###
